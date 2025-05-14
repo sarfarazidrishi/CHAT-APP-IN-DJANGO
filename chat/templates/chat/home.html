@@ -1,0 +1,21 @@
+{% extends "chat/base.html" %} {% load static%} 
+<link rel="stylesheet" href="{% static 'chat/index.css' %}?v={{ timestamp }}" />
+{% block child_css %}
+<link rel="stylesheet" href="{% static 'chat/index.css' %}?v={{ timestamp }}">
+{% endblock child_css%}
+
+
+{%block start%}
+  <div class="container">
+    <header>
+      <h1>Welcome to ChatWme</h1>
+      <p>Connect, Chat, and Share with Your Friends!</p>
+    </header>
+    <main>
+      <div class="button-group">
+        <a href="{%url 'login' %}"><button>Sign In</button></a>
+        <a href="{%url 'register' %}"><button>Sign Up</button></a>
+      </div>
+    </main>-
+  </div>
+{%endblock%} 

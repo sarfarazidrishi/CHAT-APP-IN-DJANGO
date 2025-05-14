@@ -1,0 +1,38 @@
+{% extends "chat/base.html"%} {%block start%}
+<div class="container" style="max-width: 30%">
+  <form action="{% url 'login' %}" method="POST">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="username" class="form-label">username</label>
+      <input
+        type="text"
+        class="form-control"
+        id="username"
+        name="username"
+        placeholder="enter username"
+        required
+      />
+    </div>
+    <div class="mb-3">
+      <label for="password1" class="form-label">Password</label>
+      <input
+        type="password"
+        class="form-control"
+        id="password1"
+        name="password1"
+        placeholder="enter password"
+        required
+      />
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+  {% if messages %} {%for message in messages%}
+  <p>{{message}}</p>
+  <p>{%endfor%} {%endif%}</p>
+</div>
+
+<div class="container" style="max-width: 30%">
+  <p>Don't have an account</p>
+  <a href="{%url 'register'%}"><button type="button" class="btn btn-secondary">Register</button></a>
+</div>
+{%endblock%}

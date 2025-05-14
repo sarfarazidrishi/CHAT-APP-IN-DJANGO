@@ -1,0 +1,141 @@
+{% extends "chat/base.html" %}
+{% load static %}
+{% block child_css %}
+<style>
+  :root {
+    --primary-color: #7f00ff;
+    --secondary-color: #e100ff;
+    --text-color: #333;
+    --muted-color: #6c757d;
+  }
+
+  .profile-wrapper {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .profile-card {
+    border: none;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 8px 16px rgba(127, 0, 255, 0.1);
+  }
+
+  .profile-image-container {
+    height: 100%;
+    max-height: 300px;
+    overflow: hidden;
+  }
+
+  .profile-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .profile-placeholder {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    height: 300px;
+    font-size: 5rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .profile-body {
+    padding: 2rem;
+  }
+
+  .profile-body h3 {
+    font-weight: bold;
+    color: var(--primary-color);
+  }
+
+  .profile-body p {
+    color: var(--text-color);
+  }
+
+  .btn-purple {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border: none;
+    color: white;
+    font-weight: 600;
+    transition: 0.3s ease-in-out;
+  }
+
+  .btn-purple:hover {
+    filter: brightness(1.1);
+    transform: translateY(-1px);
+  }
+
+  .search-results-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    padding: 1rem;
+  }
+  
+  .user-card {
+    width: 180px;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: #fff;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease;
+  }
+  
+  .user-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .user-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    display: block;
+  }
+  
+</style>
+{% endblock child_css %}
+
+{% block start %}
+<div class="container py-4">
+  <div class="profile-wrapper">
+    <div class="card profile-card">
+      <div class="row g-0">
+        <div class="col-md-4 profile-image-container">
+          {% if avatar %}
+            <img src="/media/{{ avatar }}" alt="Profile Picture" class="img-fluid profile-image">
+          {% else %}
+            <div class="profile-placeholder">
+              {{ username|first|upper }}
+            </div>
+          {% endif %}
+        </div>
+        <div class="col-md-8">
+          <div class="profile-body">
+            <h3>{{ username }}</h3>
+            <div>
+              {% if bio %}
+                <p>{{ bio }}</p>
+              {% else %}
+                <p class="text-muted">This user hasn't added a bio yet.</p>
+              {% endif %}
+            </div>
+
+            {% if show_message_button %}
+              <a href="{% url 'create_chat' username %}" class="btn btn-purple mt-3">
+                <i class="bi bi-chat-dots"></i> Message
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

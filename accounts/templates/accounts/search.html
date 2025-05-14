@@ -1,0 +1,82 @@
+{% extends "chat/base.html" %}
+{% load static %}
+{% block child_css %}
+<style>
+  .search-container {
+    margin-bottom: 2rem;
+  }
+</style>
+{% endblock %}
+{% block start %}
+<section class="container py-4">
+    <div class="search-container">
+        <form method="get" action="{% url 'search' %}" class="mb-4">
+            <div class="input-group">
+                <input type="text" class="form-control" name="searchkey" 
+                       placeholder="Search for users..." 
+                       value="{{ request.GET.searchkey }}" 
+                       id="searchInput" autofocus>
+                <button class="btn btn-primary" type="submit">
+                    <i class="bi bi-search"></i> Search
+                </button>
+            </div>
+        </form>
+    </div>
+
+    {% if request.GET.searchkey %}
+        <h2 class="mb-4">Search Results: "{{ request.GET.searchkey }}"</h2>
+        {% if results %}
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for result in results %}
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        {% if result.avatar %}
+                        <img src="{{result.avatar.url}}">
+                        {% else %}
+                         <img src="/media/accounts/avatars/default.png">
+                        {% endif%}
+                        <h5 class="card-title">{{ result.username }}</h5>
+                        {% if result.bio %}
+                        <p class="card-text">{{ result.bio|truncatechars:100 }}</p>
+                        {% else %}
+                        <p class="card-text text-muted">No bio available</p>
+                        {% endif %}
+
+                    </div>
+                    <div class="card-footer bg-transparent d-flex justify-content-between">
+                        <a href="{% url 'userprofile' result.username %}" class="btn btn-outline-primary">
+                            <i class="bi bi-person"></i> View Profile
+                        </a>
+                        <a href="{% url 'create_chat' result.username %}" class="btn btn-primary">
+                            <i class="bi bi-chat"></i> Message
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle me-2"></i>
+            No users found matching your search.
+        </div>
+        {% endif %}
+    {% else %}
+        <div class="text-center mt-5">
+            <div class="mb-4">
+                <i class="bi bi-search" style="font-size: 3rem; color: #6c757d;"></i>
+            </div>
+            <h3>Find People to Chat With</h3>
+            <p class="text-muted">Start typing a username above to search for users</p>
+        </div>
+    {% endif %}
+</section>
+
+<script>
+  // Auto-focus the search input when the page loads
+  document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('searchInput').focus();
+  });
+</script>
+{% endblock %}

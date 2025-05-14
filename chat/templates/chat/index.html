@@ -1,0 +1,369 @@
+{% extends "chat/base.html" %}
+{% load chat_filters %}
+{% load static %}
+
+{% block child_css %}
+<style>
+    body {
+        background: linear-gradient(to right, #f3e7ff, #e2c5ff);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .container-custom {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 0 15px;
+    }
+
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
+
+    .page-title {
+        color: #3a1a5a;
+        font-weight: 600;
+        margin: 0;
+        font-size: 1.8rem;
+    }
+
+    .header-buttons {
+        display: flex;
+        gap: 12px;
+    }
+
+    .btn-custom {
+        border-radius: 2rem;
+        padding: 0.6rem 1.2rem;
+        font-weight: 500;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        user-select: none;
+        border: 1px solid transparent;
+        transition: all 0.2s ease-in-out;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-custom i {
+        margin-right: 8px;
+    }
+
+    .btn-primary-custom {
+        background: linear-gradient(to right, #7f00ff, #e100ff);
+        color: white;
+        border: none;
+    }
+
+    .btn-primary-custom:hover {
+        background: linear-gradient(to right, #6600cc, #cc00cc);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    .btn-success-custom {
+        background: linear-gradient(to right, #a84ff1, #e100ff);
+        color: white;
+        border: none;
+    }
+
+    .btn-success-custom:hover {
+        background: linear-gradient(to right, #932ddf, #cc00cc);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    .btn-light-custom {
+        background-color: rgba(255, 255, 255, 0.8);
+        color: #7f00ff;
+        border: 1px solid rgba(127, 0, 255, 0.2);
+        font-size: 0.85rem;
+        padding: 0.4rem 0.8rem;
+    }
+
+    .btn-light-custom:hover {
+        background-color: white;
+        transform: translateY(-1px);
+    }
+
+    .row-custom {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0 -15px;
+    }
+
+    .col-half {
+        width: 100%;
+        padding: 0 15px;
+        margin-bottom: 30px;
+    }
+
+    @media (min-width: 768px) {
+        .col-half {
+            width: 50%;
+            margin-bottom: 0;
+        }
+    }
+
+    .card-custom {
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+        background-color: white;
+        border: none;
+        transition: transform 0.3s, box-shadow 0.3s;
+        height: 100%;
+    }
+
+    .card-custom:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .card-header-custom {
+        padding: 1rem 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .header-personal {
+        background: linear-gradient(to right, #7f00ff, #b35fff);
+        color: white;
+    }
+
+    .header-group {
+        background: linear-gradient(to right, #9340e1, #e100ff);
+        color: white;
+    }
+
+    .card-header-custom h4 {
+        margin: 0;
+        font-weight: 600;
+        font-size: 1.25rem;
+    }
+
+    .list-group-custom {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .list-item-custom {
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #eee;
+        display: block;
+        color: #333;
+        text-decoration: none;
+        transition: background-color 0.2s;
+    }
+
+    .list-item-custom:last-child {
+        border-bottom: none;
+    }
+
+    .list-item-custom:hover {
+        background-color: #f4efff;
+        text-decoration: none;
+        color: #333;
+    }
+
+    .item-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .user-info {
+        display: flex;
+        align-items: center;
+    }
+
+    .user-info i {
+        margin-right: 12px;
+        color: #7f00ff;
+        font-size: 1.2rem;
+    }
+
+    .text-muted-custom {
+        color: #888;
+        font-size: 0.85rem;
+    }
+
+    .description-text {
+        color: #888;
+        font-size: 0.85rem;
+        margin-top: 3px;
+        display: block;
+    }
+
+    .badge-custom {
+        background-color: rgba(127, 0, 255, 0.8);
+        color: white;
+        padding: 0.35rem 0.65rem;
+        border-radius: 1rem;
+        font-size: 0.75rem;
+        font-weight: 500;
+    }
+
+    .empty-state {
+        padding: 3rem 1.5rem;
+        text-align: center;
+    }
+
+    .empty-icon {
+        font-size: 3rem;
+        color: #ccc;
+        margin-bottom: 1rem;
+    }
+
+    .empty-title {
+        margin-bottom: 0.5rem;
+        color: #555;
+    }
+
+    .empty-subtitle {
+        color: #888;
+        margin-bottom: 1.5rem;
+    }
+
+    .no-conversations {
+        text-align: center;
+        padding: 4rem 2rem;
+        margin-top: 2rem;
+    }
+
+    .large-icon {
+        font-size: 4rem;
+        color: #ccc;
+        margin-bottom: 1.5rem;
+    }
+
+    .action-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+
+    .btn-lg-custom {
+        padding: 0.8rem 1.5rem;
+        font-size: 1.1rem;
+    }
+</style>
+{% endblock %}
+
+{% block start %}
+<div class="container-custom">
+    <div class="page-header">
+        <h2 class="page-title">Your Conversations</h2>
+        <div class="header-buttons">
+            <a href="{% url 'search' %}" class="btn-custom btn-primary-custom">
+                <i class="bi bi-plus-circle"></i>New Chat
+            </a>
+            <a href="{% url 'create_group' %}" class="btn-custom btn-success-custom">
+                <i class="bi bi-people-fill"></i>Create Group
+            </a>
+        </div>
+    </div>
+
+    <div class="row-custom">
+        <!-- Personal Chats -->
+        <div class="col-half">
+            <div class="card-custom">
+                <div class="card-header-custom header-personal">
+                    <h4>Personal Chats</h4>
+                </div>
+                {% if chatrooms %}
+                <div class="list-group-custom">
+                    {% for chatroom in chatrooms %}
+                    <a href="{% url 'chatroom' chatroom.slug %}" class="list-item-custom">
+                        <div class="item-content">
+                            <div class="user-info">
+                                <i class="bi bi-person-circle"></i>
+                                {% with username_parts=chatroom.slug|split:"-" %}
+                                    {% with other_username=username_parts.0|slugify_to_username:username_parts.1|user_filter:request.user.username %}
+                                        {{ other_username }}
+                                    {% endwith %}
+                                {% endwith %}
+                            </div>
+                            <small class="text-muted-custom">Chat ID: {{ chatroom.slug|truncatechars:15 }}</small>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="empty-state">
+                    <i class="bi bi-chat-dots empty-icon"></i>
+                    <p class="empty-title">No personal chats yet</p>
+                    <small class="empty-subtitle">Start a new conversation!</small>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Group Chats -->
+        <div class="col-half">
+            <div class="card-custom">
+                <div class="card-header-custom header-group">
+                    <h4>Group Chats</h4>
+                    <a href="{% url 'create_group' %}" class="btn-custom btn-light-custom">
+                        <i class="bi bi-plus-circle"></i> New Group
+                    </a>
+                </div>
+                {% if request.user.groupmembership_set.all %}
+                <div class="list-group-custom">
+                    {% for membership in request.user.groupmembership_set.all %}
+                    <a href="{% url 'group_chat' membership.group.slug %}" class="list-item-custom">
+                        <div class="item-content">
+                            <div class="user-info">
+                                <i class="bi bi-people-fill"></i>
+                                <div>
+                                    {{ membership.group.name }}
+                                    <span class="description-text">{{ membership.group.description|truncatechars:30 }}</span>
+                                </div>
+                            </div>
+                            {% if membership.is_admin %}
+                            <span class="badge-custom">Admin</span>
+                            {% endif %}
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="empty-state">
+                    <i class="bi bi-people empty-icon"></i>
+                    <p class="empty-title">No group chats yet</p>
+                    <a href="{% url 'create_group' %}" class="btn-custom btn-success-custom mt-2">
+                        <i class="bi bi-plus-circle"></i>Create Your First Group
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    {% if not chatrooms and not request.user.groupmembership_set.all %}
+    <div class="no-conversations">
+        <div>
+            <i class="bi bi-chat-dots large-icon"></i>
+        </div>
+        <h3 class="empty-title">No conversations yet</h3>
+        <p class="empty-subtitle">Start a new chat by searching for someone!</p>
+        <div class="action-buttons">
+            <a href="{% url 'search' %}?searchkey=" class="btn-custom btn-primary-custom btn-lg-custom">
+                <i class="bi bi-search"></i>Find People to Chat With
+            </a>
+            <a href="{% url 'create_group' %}" class="btn-custom btn-success-custom btn-lg-custom">
+                <i class="bi bi-people-fill"></i>Create a Group
+            </a>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
